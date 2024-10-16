@@ -6,8 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class imptsp:
-    def __init__(self,Fs,tsp_len,nchannel=1,dev_id=-1,dbg_ch=1,flg_fig=0,flg_dump=0,nsync=3,flg_ud=1,flg_eval=0):
-        self.chunk = 512 #length of chunk for pyaudio
+    def __init__(self,Fs,tsp_len,nchannel=2,dev_id=-1,dbg_ch=1,flg_fig=0,flg_dump=1,nsync=3,flg_ud=1,flg_eval=0):
+        self.chunk = 1024 #length of chunk for pyaudio
         self.max_amp = 8191 #32767 #maximum amplitude for output
         self.format = pyaudio.paInt16 #format
 
