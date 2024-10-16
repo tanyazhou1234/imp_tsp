@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def load_mat_file(file_path):
     data = scipy.io.loadmat(file_path)
-    impulse_responses = data['ir']  # 假设MAT文件中保存的脉冲响应是以这个变量名存储
+    impulse_responses = data['ir']
     return impulse_responses
 
 def plot_time_domain(ir, save_path, mic_id):
@@ -25,7 +25,7 @@ def process_impulse_responses(mat_file, base_folder):
         plot_time_domain(ir, base_folder, mic_id)
 
 # example
-sp_id=1 # index of loudspeaker
+sp_id=1 # check index of loudspeaker
 mic_id_start=1
 mic_id_end=32
 
