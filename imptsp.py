@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class imptsp:
-    def __init__(self,Fs,tsp_len,nchannel=2,dev_id=-1,dbg_ch=1,flg_fig=0,flg_dump=1,nsync=3,flg_ud=1,flg_eval=0):
+    def __init__(self,Fs,tsp_len,sp_cur,nchannel=32,dev_id=-1,dbg_ch=1,flg_fig=0,flg_dump=1,nsync=5,flg_ud=0,flg_eval=0):
         self.chunk = 1024 #length of chunk for pyaudio
         self.max_amp = 8191 #32767 #maximum amplitude for output
         self.format = pyaudio.paInt16 #format
@@ -21,6 +21,8 @@ class imptsp:
         self.nsync = nsync #number of synchronous additions
         self.flg_ud = flg_ud #TSP up or down
         self.flg_eval = flg_eval #TSP evaluation flag
+
+        self.sp_cur=sp_cur # to save current fig
 
         self.fftlen = self.tsp_len # FFT length
         self.stft_len = 256 #STFT length
@@ -216,7 +218,8 @@ class imptsp:
         tsp_rcv_raw = b''.join(self.pa_indata) #concatenate frames
 
         if self.flg_dump:
-            wf = wave.open('tsp_in.wav','wb')
+            wav_in_file=f"tsp_in_out{self.sp_cur}_in{self.dbg_ch+1}.wav"
+            wf = wave.open(wav_in_file,'wb')
             wf.setparams((self.nchannel, self.pa.get_sample_size(self.format), self.Fs, self.tsp_len*(self.nsync+1), 'NONE', 'not compressed'))
             wf.writeframesraw(tsp_rcv_raw)
             wf.close()
@@ -255,16 +258,20 @@ class imptsp:
             plt.xlabel("Time [s]")
             plt.ylabel("Frequency [Hz]")
 
-            plt.figure()
-            plt.plot(tsp_rcv_sig[in_channel[self.dbg_ch],:])
+            fig_spectrum_name=f'rcvSig_spectrum_SP{self.sp_cur}_MIC{self.dbg_ch+1}.png'
+            plt.savefig(fig_spectrum_name)
+            plt.close()
+
+            #plt.figure()
+            #plt.plot(tsp_rcv_sig[in_channel[self.dbg_ch],:])
 
             #plt.figure()
             #plt.plot(tsp_rcv_sum[in_channel[self.dbg_ch],:])
 
-            plt.figure()
-            plt.plot(imp[in_channel[self.dbg_ch],:])
+            #plt.figure()
+            #plt.plot(imp[in_channel[self.dbg_ch],:])
 
-            plt.show()
+            #plt.show()
 
         return (imp, tsp_rcv_sig[in_channel[self.dbg_ch],:])
 
