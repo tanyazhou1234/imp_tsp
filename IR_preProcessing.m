@@ -74,7 +74,7 @@ for row_idx=1:32
             H = fft(h, Nfft);
             %H_positive(:, ch) = H(2:Nfft/2+1);
             h_cur_positive=H(2:Nfft/2+1);
-            ch_cur=ch*row_idx;
+            ch_cur=(row_idx-1)*32 + ch;
             G.(sprintf('sp%d_mic%d', sp_cur, ch_cur)) = h_cur_positive;
         end
             
